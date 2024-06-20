@@ -5,11 +5,14 @@ from PIL import Image, ImageDraw
 import ot
 import ot.plot
 from ot.datasets import make_1D_gauss as gauss
+from tqdm import tqdm
+
+
 
 # Sinkhorn parameters
 n = 100 # problem size
 epsilon = 0.001 # regularization parameter
-iters = 1000 # number of iterations
+iters = 10000000 # number of iterations
 
 # Initializing marginal probability vectors
 a = gauss(n, 50, 5)
@@ -30,9 +33,10 @@ u_bar = np.ones(n)
 v_bar = np.ones(n)
 
 # Run the Sinkhorn algorithm
-for i in range(iters):
+for i in tqdm(range(iters)):
     u_bar = a / np.dot(K, v_bar)
     v_bar = b / np.dot(np.transpose(K), u_bar)
+print("algorithm is complete")
 
 # Compute the optimal transport plan
 P = np.diag(u_bar) @ K @ np.diag(v_bar)
