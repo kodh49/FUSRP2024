@@ -7,36 +7,40 @@ import ot.plot
 from ot.datasets import make_1D_gauss as gauss
 from tqdm import tqdm
 
-
-
 # Sinkhorn parameters
-n = 100 # problem size
+n = 100 # probability vectors in \R^n
 epsilon = 0.001 # regularization parameter
-iters = 10000000 # number of iterations
+iters = 10000 # number of iterations
 
 # Initializing marginal probability vectors
 a = gauss(n, 50, 5)
 b = gauss(n, 30, 10)
 
 # Initialize cost matrix
-x = np.arange(n, dtype=np.float64)
-C = ot.dist(x.reshape((n,1)), x.reshape((n,1)))
-C = C/C.max()
+x = np.arange(n, dtype=np.float64) # vector in \R^n of the form [1,...,n]
+C = ot.dist(x.reshape((n,1)), x.reshape((n,1))) # Euclidean metric as a cost function
+# Another option (Jaccard metric) for the cost function can be the following
+# C = ot.dist(x.reshape((n,1)), x.reshape((n,1)), metric='jaccard') 
+C = C/C.max() # normalize the cost to prevent overflow in computation
 
-ot.plot.plot1D_mat(a,b,C, 'Cost matrix C with probability vectors a and b')
-
-# Compute the kernel matrix
+# Compute the kernel matrix K_{ij} = e^{C_{ij}/\epsilon}
 K = np.exp(-C/epsilon)
 
-# Initial choice for the scaling variables
-u_bar = np.ones(n)
-v_bar = np.ones(n)
+# Initialize Lagrange multipliers u,v to zero vectors
+u_bar = np.ones(n) # e^{u_i} = 1 for all i
+v_bar = np.ones(n) # e^{v_j} = 1 for all j
 
-# Run the Sinkhorn algorithm
+# iterations
 for i in tqdm(range(iters)):
     u_bar = a / np.dot(K, v_bar)
     v_bar = b / np.dot(np.transpose(K), u_bar)
-print("algorithm is complete")
+print("iteration is complete")
 
-# Compute the optimal transport plan
-P = np.diag(u_bar) @ K @ np.diag(v_bar)
+# Compute the transport plan with optimized multipliers u and v
+P = np.matmul(np.matmul(np.diag(u_bar),K), np.diag(v_bar))
+
+# Visualization
+ot.plot.plot1D_mat(a,b,C,'Cost matrix C with probability vectors a and b')
+plt.savefig('cost_matrix.png')
+ot.plot.plot1D_mat(a,b,P,'Optimal Transport Plan P with probability vectors a and b')
+plt.savefig('eot_result.png')
