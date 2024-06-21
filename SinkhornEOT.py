@@ -10,7 +10,7 @@ from tqdm import tqdm
 # Sinkhorn parameters
 n = 100 # probability vectors in \R^n
 epsilon = 0.001 # regularization parameter
-iters = 10000 # number of iterations
+iters = 1000000 # number of iterations
 
 # Initializing marginal probability vectors
 a = gauss(n, 50, 5)
@@ -30,6 +30,10 @@ K = np.exp(-C/epsilon)
 u_bar = np.ones(n) # e^{u_i} = 1 for all i
 v_bar = np.ones(n) # e^{v_j} = 1 for all j
 
+# visualization
+ot.plot.plot1D_mat(a,b,C,'cost matrix C')
+plt.savefig('cost_matrix.png')
+
 # iterations
 for i in tqdm(range(iters)):
     u_bar = a / np.dot(K, v_bar)
@@ -40,7 +44,5 @@ print("iteration is complete")
 P = np.matmul(np.matmul(np.diag(u_bar),K), np.diag(v_bar))
 
 # Visualization
-ot.plot.plot1D_mat(a,b,C,'Cost matrix C with probability vectors a and b')
-plt.savefig('cost_matrix.png')
 ot.plot.plot1D_mat(a,b,P,'Optimal Transport Plan P with probability vectors a and b')
 plt.savefig('eot_result.png')
