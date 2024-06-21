@@ -9,7 +9,7 @@ from tqdm import tqdm
 
 # Sinkhorn parameters
 n = 100 # probability vectors in \R^n
-epsilon = 0.001 # regularization parameter
+epsilon = 0.5 # regularization parameter
 iters = 1000000 # number of iterations
 
 # Initializing marginal probability vectors
@@ -18,9 +18,9 @@ b = gauss(n, 30, 10)
 
 # Initialize cost matrix
 x = np.arange(n, dtype=np.float64) # vector in \R^n of the form [1,...,n]
-# C = ot.dist(x.reshape((n,1)), x.reshape((n,1))) # Euclidean metric as a cost function
+C = ot.dist(x.reshape((n,1)), x.reshape((n,1))) # Euclidean metric as a cost function
 # Another option (Jaccard metric) for the cost function can be the following
-C = ot.dist(x.reshape((n,1)), x.reshape((n,1)), metric='jaccard') 
+# C = ot.dist(x.reshape((n,1)), x.reshape((n,1)), metric='jaccard') 
 C = C/C.max() # normalize the cost to prevent overflow in computation
 
 print("max:",C.max(),"min:",C.min())
