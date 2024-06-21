@@ -9,7 +9,7 @@ from tqdm import tqdm
 
 # Sinkhorn parameters
 n = 100 # probability vectors in \R^n
-epsilon = 0.5 # regularization parameter
+epsilon = 0.0000001 # regularization parameter
 iters = 1000000 # number of iterations
 
 # Initializing marginal probability vectors
