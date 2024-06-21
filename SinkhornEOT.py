@@ -23,9 +23,6 @@ C = ot.dist(x.reshape((n,1)), x.reshape((n,1))) # Euclidean metric as a cost fun
 # C = ot.dist(x.reshape((n,1)), x.reshape((n,1)), metric='jaccard') 
 C = C/C.max() # normalize the cost to prevent overflow in computation
 
-print("max:",C.max(),"min:",C.min())
-print(C)
-
 # Compute the kernel matrix K_{ij} = e^{C_{ij}/\epsilon}
 K = np.exp(-C/epsilon)
 
@@ -35,7 +32,7 @@ v_bar = np.ones(n) # e^{v_j} = 1 for all j
 
 # visualization
 ot.plot.plot1D_mat(a,b,C,'cost matrix C')
-plt.savefig('jaccard_cost_matrix.png')
+plt.savefig('cost_matrix.png')
 
 # iterations
 for i in tqdm(range(iters)):
@@ -48,4 +45,4 @@ P = np.matmul(np.matmul(np.diag(u_bar),K), np.diag(v_bar))
 
 # Visualization
 ot.plot.plot1D_mat(a,b,P,'optimal transport plan')
-plt.savefig('jaccard_eot_result.png')
+plt.savefig('eot_result.png')
