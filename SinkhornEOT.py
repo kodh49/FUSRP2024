@@ -3,14 +3,16 @@ import numpy as np
 import matplotlib.pyplot as plt
 from PIL import Image, ImageDraw
 import ot, itertools
+import pandas as pd
 import ot.plot
 from ot.datasets import make_1D_gauss as gauss
 from tqdm import tqdm
 
 # Sinkhorn parameters
 n = 100 # probability vectors in \R^n
-epsilon = 700 # regularization parameter
+epsilon = 1000 # regularization parameter
 iters = 100000 # number of iterations
+filename="Quadratic_eps"+str(epsilon)+"n"+str(n)
 
 def compute_cost_matrix_coulomb(n, N):
     # Initialize an N-dimensional array of size n in each dimension
@@ -81,4 +83,6 @@ for i in range(n):
 # Visualization
 print(P)
 ot.plot.plot1D_mat(a,b,P,'optimal transport plan')
-plt.savefig('eot_result.png')
+plt.savefig('eot_result'+filename+'.png')
+df = pd.DataFrame(data=P.astype(float))
+df.to_csv('Stochastic_P', sep= ' ', header=False, index=False)
