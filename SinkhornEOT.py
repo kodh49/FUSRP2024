@@ -9,7 +9,7 @@ from tqdm import tqdm
 
 # Sinkhorn parameters
 n = 100 # probability vectors in \R^n
-epsilon = 7 # regularization parameter
+epsilon = 700 # regularization parameter
 iters = 100000 # number of iterations
 
 def compute_cost_matrix_coulomb(n, N):
