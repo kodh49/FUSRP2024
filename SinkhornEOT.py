@@ -10,7 +10,7 @@ from tqdm import tqdm
 
 # Sinkhorn parameters
 n = 100 # probability vectors in \R^n
-epsilon = 1000 # regularization parameter
+epsilon = 0.001 # regularization parameter
 iters = 100000 # number of iterations
 filename="Quadratic_eps"+str(epsilon)+"n"+str(n)
 
@@ -81,7 +81,7 @@ for i in range(n):
 # P = np.matmul(np.matmul(np.diag(u_bar),K), np.diag(v_bar))
 
 # Visualization
-print(P)
+print(np.sum(P))
 ot.plot.plot1D_mat(a,b,P,'optimal transport plan')
 plt.savefig('eot_result'+filename+'.png')
 df = pd.DataFrame(data=P.astype(float))
